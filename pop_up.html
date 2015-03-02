@@ -1,0 +1,67 @@
+<html>
+<head>
+<body>
+<script type="text/javascript">
+img1=new Image();
+img_to=0;
+
+function imgopen(imgf,tit){
+   img1.src=imgf;
+   img1.onload=function() { LoadImage(img1,tit); };
+   img_to=window.setTimeout(function() { LoadImage(img1,tit); }, 100 ); // if onload wouldn't work
+// uploading image
+// event handler for the image - onLoad
+   return false;
+}
+
+function LoadImage(img1,tit){
+if(img_to){window.clearTimeout(img_to);img_to=0;} // for not open 2 windows
+if(!img1.width){ // uploading
+   img_to=window.setTimeout(function() { LoadImage(img1,tit); }, 100 ); // if onload wouldn't work
+   return;
+}
+img1.onload=null; // for not open 2 windows
+
+rand_id='image'+(Math.round(Math.random()*1000));
+
+outf="<html><head>"
+ +"<title>"+tit+"</title>"
+ +"</head>"
+ +"<body style=\"margin:0\">"
+ +"<img style=\"margin:0\" src=\""+img1.src+"\" width=\""+img1.width+"\" height=\""+img1.height+"\" /><br>"
+ +" ("+(img1.width)+"x"+(img1.height)+")"
+ +"</body></html>" ;
+
+iopen="iwin=self.open('"+img1.src+"', '"+rand_id+"', 'width="+(img1.width)+",height="+(img1.height+20)+",top=50,left=50');"
+ +"if(iwin){iwin.document.write('"+outf+"');"
+ +"iwin.focus();}";
+
+img1=null; 
+eval(iopen);
+}
+
+
+function imgdiv(url)
+    {
+    var el=document.getElementById('img_div');
+    var img=new Image();
+    img.onload=function()
+        {
+        el.style.width=img.width+'px';
+        el.style.height=(img.height+20)+'px';
+        el.innerHTML='<img src='+url+' style="margin:0" width="'+img.width+'" height="'+img.height+'" /><br> ('+img.width+'x'+img.height+')';
+        }
+    el.innerHTML='Загружается...';
+    img.src=url;
+    }
+
+</script>
+<h3><a href='#' onclick='return imgopen("http://cs619531.vk.me/v619531151/626f/x3FwnRqBdks.jpg","Window name");'>Open a window</a></h3>
+
+
+<h3><a href='#' onclick='imgdiv("http://cs619531.vk.me/v619531151/626f/x3FwnRqBdks.jpg")'>Open DIV</a></h3>
+
+<div id="img_div" style='BORDER:#9fbddd 1px solid;'></div>
+</body>
+</head>
+</html>
